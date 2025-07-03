@@ -2,74 +2,85 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Weather & Time Dashboard</title>
+<title>7-Day Forecast Dashboard</title>
 <style>
     body {
         font-family: "Segoe UI", sans-serif;
         background: #081c2f;
-        color: #ffffff;
+        color: white;
         display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
-    .block {
-        background: rgba(255, 255, 255, 0.1);
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: wrap;
         padding: 20px;
+    }
+    .city {
+        background: rgba(255,255,255,0.1);
         border-radius: 15px;
+        padding: 20px;
+        margin: 10px;
+        width: 220px;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .city h2 {
+        margin-top: 0;
+        font-size: 1.5em;
         text-align: center;
-        width: 200px;
     }
-    .block h2 {
-        font-size: 1.4em;
-        margin-bottom: 10px;
-    }
-    iframe {
-        border: none;
-        background: transparent;
-        margin-bottom: 15px;
-    }
-    .time {
-        font-size: 2em;
-        font-weight: bold;
+    .forecast-day {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
     }
 </style>
 </head>
 <body>
-<div class="block">
+
+<div class="city" id="city1">
     <h2>Sabetha (66534)</h2>
-    <iframe src="https://wttr.in/66534?format=3&u" width="250" height="50"></iframe>
-    <div class="time" id="time1"></div>
+    <div class="forecast"></div>
 </div>
-<div class="block">
+<div class="city" id="city2">
     <h2>Fort Dodge (50501)</h2>
-    <iframe src="https://wttr.in/50501?format=3&u" width="250" height="50"></iframe>
-    <div class="time" id="time2"></div>
+    <div class="forecast"></div>
 </div>
-<div class="block">
+<div class="city" id="city3">
     <h2>South Pittsburg (37347)</h2>
-    <iframe src="https://wttr.in/37347?format=3&u" width="250" height="50"></iframe>
-    <div class="time" id="time3"></div>
+    <div class="forecast"></div>
 </div>
-<div class="block">
+<div class="city" id="city4">
     <h2>Paola (66092)</h2>
-    <iframe src="https://wttr.in/66092?format=3&u" width="250" height="50"></iframe>
-    <div class="time" id="time4"></div>
+    <div class="forecast"></div>
 </div>
 
 <script>
-function updateTime() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('time1').textContent = timeStr;
-    document.getElementById('time2').textContent = timeStr;
-    document.getElementById('time3').textContent = timeStr;
-    document.getElementById('time4').textContent = timeStr;
+const locations = [
+    { id: "city1", lat: 39.93, lon: -95.80 },
+    { id: "city2", lat: 42.50, lon: -94.18 },
+    { id: "city3", lat: 35.01, lon: -85.71 },
+    { id: "city4", lat: 38.58, lon: -94.88 }
+];
+
+async function fetchWeather(city) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&daily=temperature_2m_max&timezone=auto`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const days = data.daily.time;
+    const temps = data.daily.temperature_2m_max;
+    const container = document.querySelector(`#${city.id} .forecast`);
+    container.innerHTML = "";
+    for (let i = 0; i < days.length; i++) {
+        const day = new Date(days[i]).toLocaleDateString(undefined, {weekday: 'short'});
+        const temp = temps[i].toFixed(0);
+        const div = document.createElement('div');
+        div.className = "forecast-day";
+        div.innerHTML = `<span>${day}</span><span>${temp}°F</span>`;
+        container.appendChild(div);
+    }
 }
-setInterval(updateTime, 1000);
-updateTime();
+
+locations.forEach(fetchWeather);
+setInterval(() => { locations.forEach(fetchWeather); }, 600000); // refresh every 10 min
 </script>
 </body>
 </html>
