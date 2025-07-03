@@ -65,4 +65,13 @@ fetch('forecast.json')
       city.daily.forEach(dayInfo => {
         const day = new Date(dayInfo.day).toLocaleDateString(undefined, {weekday: 'short'});
         const div = document.createElement('div');
-        div.cl
+        div.className = "forecast-day";
+        div.innerHTML = `<span>${day}</span><span>${dayInfo.high}°F</span>`;
+        container.appendChild(div);
+      });
+    }
+  })
+  .catch(err => console.error('Error loading forecast.json:', err));
+</script>
+</body>
+</html>
