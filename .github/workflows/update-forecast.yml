@@ -1,0 +1,32 @@
+name: Update Forecast
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # every day at 6am UTC
+  workflow_dispatch:       # manual trigger
+
+jobs:
+  update-forecast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Update forecast.json
+        run: python update_forecast.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add forecast.json
+          git commit -m "Update forecast.json"
+          git push
