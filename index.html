@@ -5,46 +5,57 @@
 <title>Weather & Time Dashboard</title>
 <style>
     body {
-        font-family: sans-serif;
-        background: #0a2a43;
-        color: white;
+        font-family: "Segoe UI", sans-serif;
+        background: #081c2f;
+        color: #ffffff;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-evenly;
         align-items: center;
         height: 100vh;
+        margin: 0;
     }
     .block {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
         text-align: center;
+        width: 200px;
+    }
+    .block h2 {
+        font-size: 1.4em;
+        margin-bottom: 10px;
     }
     iframe {
         border: none;
         background: transparent;
+        margin-bottom: 15px;
     }
     .time {
         font-size: 2em;
-        margin-top: 10px;
+        font-weight: bold;
     }
 </style>
 </head>
 <body>
 <div class="block">
     <h2>Sabetha (66534)</h2>
-    <iframe src="https://wttr.in/66534?format=3" width="250" height="50"></iframe>
+    <iframe src="https://wttr.in/66534?format=3&u" width="250" height="50"></iframe>
     <div class="time" id="time1"></div>
 </div>
 <div class="block">
     <h2>Fort Dodge (50501)</h2>
-    <iframe src="https://wttr.in/50501?format=3" width="250" height="50"></iframe>
+    <iframe src="https://wttr.in/50501?format=3&u" width="250" height="50"></iframe>
     <div class="time" id="time2"></div>
 </div>
 <div class="block">
     <h2>South Pittsburg (37347)</h2>
-    <iframe src="https://wttr.in/37347?format=3" width="250" height="50"></iframe>
+    <iframe src="https://wttr.in/37347?format=3&u" width="250" height="50"></iframe>
     <div class="time" id="time3"></div>
 </div>
 <div class="block">
     <h2>Paola (66092)</h2>
-    <iframe src="https://wttr.in/66092?format=3" width="250" height="50"></iframe>
+    <iframe src="https://wttr.in/66092?format=3&u" width="250" height="50"></iframe>
     <div class="time" id="time4"></div>
 </div>
 
