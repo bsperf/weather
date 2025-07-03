@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>7-Day Forecast Dashboard</title>
+<title>7-Day Local Forecast</title>
 <style>
     body {
         font-family: "Segoe UI", sans-serif;
@@ -10,9 +10,9 @@
         color: white;
         display: flex;
         justify-content: space-around;
-        align-items: flex-start;
         flex-wrap: wrap;
         padding: 20px;
+        margin: 0;
     }
     .city {
         background: rgba(255,255,255,0.1);
@@ -31,56 +31,38 @@
         display: flex;
         justify-content: space-between;
         margin: 5px 0;
+        font-size: 1.2em;
     }
 </style>
 </head>
 <body>
 
-<div class="city" id="city1">
+<div class="city" id="66534">
     <h2>Sabetha (66534)</h2>
     <div class="forecast"></div>
 </div>
-<div class="city" id="city2">
+<div class="city" id="50501">
     <h2>Fort Dodge (50501)</h2>
     <div class="forecast"></div>
 </div>
-<div class="city" id="city3">
+<div class="city" id="37347">
     <h2>South Pittsburg (37347)</h2>
     <div class="forecast"></div>
 </div>
-<div class="city" id="city4">
+<div class="city" id="66092">
     <h2>Paola (66092)</h2>
     <div class="forecast"></div>
 </div>
 
 <script>
-const locations = [
-    { id: "city1", lat: 39.93, lon: -95.80 },
-    { id: "city2", lat: 42.50, lon: -94.18 },
-    { id: "city3", lat: 35.01, lon: -85.71 },
-    { id: "city4", lat: 38.58, lon: -94.88 }
-];
-
-async function fetchWeather(city) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&daily=temperature_2m_max&timezone=auto`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const days = data.daily.time;
-    const temps = data.daily.temperature_2m_max;
-    const container = document.querySelector(`#${city.id} .forecast`);
-    container.innerHTML = "";
-    for (let i = 0; i < days.length; i++) {
-        const day = new Date(days[i]).toLocaleDateString(undefined, {weekday: 'short'});
-        const temp = temps[i].toFixed(0);
+fetch('forecast.json')
+  .then(response => response.json())
+  .then(data => {
+    for (let zip in data) {
+      const city = data[zip];
+      const container = document.querySelector(`#${zip} .forecast`);
+      container.innerHTML = "";
+      city.daily.forEach(dayInfo => {
+        const day = new Date(dayInfo.day).toLocaleDateString(undefined, {weekday: 'short'});
         const div = document.createElement('div');
-        div.className = "forecast-day";
-        div.innerHTML = `<span>${day}</span><span>${temp}°F</span>`;
-        container.appendChild(div);
-    }
-}
-
-locations.forEach(fetchWeather);
-setInterval(() => { locations.forEach(fetchWeather); }, 600000); // refresh every 10 min
-</script>
-</body>
-</html>
+        div.cl
